@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { TopMenuBar } from '../components';
-import LoginView from '../../authc/components/LoginView';
+import { TopMenuView } from '../components';
+import LoginPopupView from '../../authc/components/LoginPopupView';
 
 import { loginUser, logoutUser } from '../../authc/actions';
 
@@ -13,15 +13,12 @@ import { loginUser, logoutUser } from '../../authc/actions';
     currentUser: state.authc.currentUser,
     error: state.authc.error
 }), {
-    loginUser, logoutUser
+    logoutUser
 })
-class TopMenuContainer extends Component {
+class TopMenu extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            showLoginDialog: false
-        }
     }
 
     static propTypes = {
@@ -40,9 +37,10 @@ class TopMenuContainer extends Component {
     }
 
     handleLoginAction() {
-        this.setState({
-            showLoginDialog: true
-        });
+        this.context.router.push(`/login`);
+        //this.setState({
+        //    showLoginDialog: true
+        //});
     }
 
     handleLogoutAction() {
@@ -50,24 +48,11 @@ class TopMenuContainer extends Component {
         this.context.router.push(`/home`);
     }
 
-    handleLoginCancelAction() {
-        this.setState({
-            showLoginDialog: false
-        });
-    }
-
-    handleLoginOkAction(username, password) {
-        this.setState({
-            showLoginDialog: false
-        });
-        this.props.loginUser(username, password);
-    }
-
     render() {
 
         return (
             <div>
-                <TopMenuBar isLoginIn={this.props.isAuthenticated}
+                <TopMenuView isLoginIn={this.props.isAuthenticated}
                             title="P2PLib"
                             topMenuBarStyle={this.props.topMenuBarStyle}
                             topMenuTitleStyle={this.props.topMenuTitleStyle}
@@ -76,11 +61,10 @@ class TopMenuContainer extends Component {
                             onLogoutRequest={::this.handleLogoutAction}
                 />
 
-                <LoginView open={this.state.showLoginDialog} onOk={::this.handleLoginOkAction} onCancel={::this.handleLoginCancelAction} />
             </div>
 
         );
     }
 }
 
-export default TopMenuContainer;
+export default TopMenu;

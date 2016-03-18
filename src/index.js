@@ -8,7 +8,15 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import configureStore from './store/configureStore';
 import appRoutes from './routes';
 
-const store = configureStore();
+const initialState = {
+    //TODO should get auth info from local storage or cookie
+    authc: {
+        isAuthenticated: false,
+        currentUser: null,
+        token: null
+    }
+};
+const store = configureStore(initialState);
 const history = syncHistoryWithStore(browserHistory, store)
 
 const Root = (
